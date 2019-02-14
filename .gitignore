@@ -8,3 +8,5 @@
 
 /lyric-emotion-search-client/e2e/**
 /lyric-emotion-search-client/node_modules/**
+
+/crawler/*.json
