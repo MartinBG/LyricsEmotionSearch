@@ -1,2 +1,10 @@
 /cased_L-12_H-768_A-12/**
+
 /data/dataset.bin
+
+/crawler/lyrics/artists/**
+/crawler/lyrics/texts/**
+/crawler/lyrics/songs/**
+
+/lyric-emotion-search-client/e2e/**
+/lyric-emotion-search-client/node_modules/**
