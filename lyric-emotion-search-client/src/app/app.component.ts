@@ -13,40 +13,48 @@ export class AppComponent {
   results: Array<SearchResult> = [];
 
   constructor(private http: HttpClient) {
-    this.results = [{
-      author: 'author1',
-      song_name: 'song1',
-      happy_score: 0.25,
-      sad_score: 0.25,
-      relaxed_score: 0.25,
-      angry_score: 0.25,
-      lyrics: 'lyrics sample1'
-    },
-    {
-      author: 'author2',
-      song_name: 'song2',
-      happy_score: 0.35,
-      sad_score: 0.15,
-      relaxed_score: 0.35,
-      angry_score: 0.15,
-      lyrics: 'lyrics sample2'
-    }];
   }
 
   search() {
     const url = "http:\\\\127.0.0.1:5000\\api\\search";
     return this.http.post<Array<SearchResult>>(url, this.filter)
       .subscribe(res => {
-        this.results = res;
+        let new_res = this.normalize(res);
+        console.log(new_res)
+        new_res = this.sort(new_res);
+        this.results = new_res;
       }, error => {
         console.log(error);
       });
+  }
+
+  normalize(arr: Array<SearchResult>): Array<SearchResult> {
+    arr.forEach(element => {
+      element.normalized_lyrics = element.lyrics.split('.');
+      element['angry_score'] = element['angry_score']*100;
+      element['happy_score'] = element['happy_score']*100;
+      element['relaxed_score'] = element['relaxed_score']*100;
+      element['sad_score'] = element['sad_score']*100;
+    });
+    return arr;
+  }
+
+  sort(arr: Array<SearchResult>): Array<SearchResult> {
+    if(!this.filter.emotion)
+      return arr;
+
+    const emotion_term = this.filter.emotion + "_score";
+    arr.sort((el1, el2) => { 
+      if(el1[emotion_term] > el2[emotion_term])
+        return -1;
+    })
+    return arr;
   }
 }
 
 class Filter {
   term: string;
-  category: string;
+  emotion: string;
 }
 
 class SearchResult {
@@ -57,4 +65,6 @@ class SearchResult {
   relaxed_score: number;
   angry_score: number;
   lyrics: string;
+  normalized_lyrics: Array<string>;
+  opened_lyrics: boolean;
 }

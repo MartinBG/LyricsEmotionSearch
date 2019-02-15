@@ -10,3 +10,6 @@
 /lyric-emotion-search-client/node_modules/**
 
 /crawler/*.json
+
+/models/*
+/encoded/*

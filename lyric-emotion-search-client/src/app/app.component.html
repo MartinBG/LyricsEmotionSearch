@@ -6,7 +6,7 @@
 </div>
 <div class="container">
   <div class="row">
-    <div class="form-group col-sm-9">
+    <div class="form-group col-sm-7">
       <label>Текст</label>
       <input class="form-control" 
              type="text"
@@ -17,14 +17,12 @@
       <select class="form-control"
              [(ngModel)]="filter.emotion">
         <option value="happy">Щастие</option>
-        <option value="angry">Ярост</option>
+        <option value="angry">Гняв</option>
         <option value="sad">Тъга</option>
         <option value="relaxed">Спокойствие</option>
       </select>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-2 pull-right">
+    <div class="col-sm-1" style="margin-top: 25px">
       <button class="btn btn-primary btn-md"
               (click)="search()">
             Търсене
@@ -35,21 +33,30 @@
     <table class="table table-bordered">
       <tr style="font-weight: bold">
         <td class="col-sm-1">Щастие</td>
-        <td class="col-sm-1">Ярост</td>
+        <td class="col-sm-1">Гняв</td>
         <td class="col-sm-1">Тъга</td>
         <td class="col-sm-1">Спокойствие</td>
-        <td class="col-sm-2">Изпълнител</td>
+        <td class="col-sm-1">Изпълнител</td>
         <td class="col-sm-2">Име</td>
-        <td class="col-sm-4">Текст</td>
+        <td class="col-sm-5">Текст</td>
       </tr>
       <tr *ngFor="let item of results">
-        <td>{{item.happy_score}}</td>
-        <td>{{item.angry_score}}</td>
-        <td>{{item.sad_score}}</td>
-        <td>{{item.relaxed_score}}</td>
+        <td>{{item.happy_score.toString().slice(0,5)}}%</td>
+        <td>{{item.angry_score.toString().slice(0,5)}}%</td>
+        <td>{{item.sad_score.toString().slice(0,5)}}%</td>
+        <td>{{item.relaxed_score.toString().slice(0,5)}}%</td>
         <td>{{item.author}}</td>
         <td>{{item.song_name}}</td>
-        <td>{{item.lyrics}}</td>
+        <td (click)="item.opened_lyrics = !item.opened_lyrics">
+          <div *ngIf="item.opened_lyrics">
+          <span *ngFor="let line of item.normalized_lyrics" style="text-align:center">
+            {{line}}<br/>
+          </span>
+        </div>
+          <span *ngIf="!item.opened_lyrics">
+            {{item.lyrics.slice(0,100)}}...
+          </span>
+        </td>
       </tr>
     </table>
   </div>

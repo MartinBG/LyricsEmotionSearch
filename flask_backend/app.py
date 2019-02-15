@@ -11,10 +11,12 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/api/search', methods=['POST'])
 @cross_origin()
-def hello():
+def search():
 
     ix = open_dir("../final_data/indexdir")
  
+    if not request.json['term']:
+        return json.dumps([])
     with ix.searcher(weighting=scoring.Frequency) as searcher:
         query = QueryParser("lyrics", ix.schema).parse(request.json['term'])
         results = searcher.search(query,limit=10)
